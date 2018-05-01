@@ -33,6 +33,7 @@ class QueueOfTiles():
 
     def Add(self):
         if self._Rear < self._MaxSize - 1:
+            RandNo = 0
             if random.randint(0,1) == 0: 
                 RandNo = random.randint(0, 25)
                 while RandNo not in [0,4,8,14,20]:
@@ -40,12 +41,9 @@ class QueueOfTiles():
             if random.randint(0,1) == 1:
                 RandNo = random.randint(0, 25)
                 while RandNo in [0,4,8,14,20]:
-                    RandNo = random.randint(0,26)
-                    if RandNo == 26:
-                        self._Contents[self._Rear] = "-"        
-                    else:
-                        self._Rear += 1
-                        self._Contents[self._Rear] = chr(65 + RandNo)
+                    RandNo = random.randint(0,25)
+            self._Rear += 1
+            self._Contents[self._Rear] = chr(65 + RandNo)
 
     def Show(self):
         if self._Rear != -1:
@@ -159,15 +157,12 @@ def GetChoice():
     print("     enter the word you would like to play OR")
     print("     press 1 to display the letter values OR")
     print("     press 4 to view the tile queue OR")
+    print("     press 5 to shuffle the tiles in your hand OR")
     print("     press 7 to view your tiles again OR")
     print("     press 0 to fill hand and stop the game.")
     Choice = input(">")
     print()
     Choice = Choice.upper()
-    if "-" in Choice:
-        print("Enter Character for the wildcard: ")
-        temp = input(">")
-        Choice.replace("-",temp)
     return Choice
 
 def GetNewTileChoice():
@@ -185,6 +180,14 @@ def DisplayTilesInHand(PlayerTiles):
     print()
     print("Your current hand:", PlayerTiles)
 
+def Shuffle(PlayerTiles):
+    list(PlayerTiles)
+    random.shuffle(PlayerTiles)
+    PlayerTiles = "".join(PlayerTiles)
+    DisplayTilesInHand(PlayerTiles)
+    return PlayerTiles
+
+
 def HaveTurn(PlayerName, PlayerTiles, PlayerTilesPlayed, PlayerScore, TileDictionary, TileQueue, AllowedWords, MaxHandSize, NoOfEndOfTurnTiles):
     print()
     print(PlayerName, "it is your turn.")
@@ -197,6 +200,8 @@ def HaveTurn(PlayerName, PlayerTiles, PlayerTilesPlayed, PlayerScore, TileDictio
             DisplayTileValues(TileDictionary, AllowedWords)
         elif Choice == "4":
             TileQueue.Show()
+        elif Choice == "5":
+            Shuffle(PlayerTiles)
         elif Choice == "7":
             DisplayTilesInHand(PlayerTiles)      
         elif Choice == "0":
@@ -205,6 +210,7 @@ def HaveTurn(PlayerName, PlayerTiles, PlayerTilesPlayed, PlayerScore, TileDictio
         else:
             ValidChoice = True
         if len(Choice) == 0:
+            print(len(Choice))
             ValidWord = False
         else:
             ValidWord = CheckWordIsInTiles(Choice, PlayerTiles)
