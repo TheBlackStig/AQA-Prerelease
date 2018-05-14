@@ -102,25 +102,24 @@ def CheckWordIsInTiles(Word, PlayerTiles):
 
 
 def CheckWordIsValid(Word, AllowedWords):
-    '''ValidWord = False
+   """ValidWord = False
     Count = 0
     while Count < len(AllowedWords) and not ValidWord:
         if AllowedWords[Count] == Word:
             ValidWord = True
         Count += 1
-    return ValidWord'''
+    return ValidWord"""
     high = len(AllowedWords) - 1
     low = 0
-    while low <= high:
+    while high > low:
         mid = (high + low) // 2
-        if AllowedWords[mid] > Word:
+        if AllowedWords[mid - 1] < Word:
             high = mid - 1
-        elif AllowedWords[mid] < Word:
+        elif AllowedWords[mid] > Word:
             low = mid + 1
         else:
             return True
     return False
-        
 
 
 def AddEndOfTurnTiles(TileQueue, PlayerTiles, NewTileChoice, Choice):
@@ -327,3 +326,4 @@ def Main():
 
 if __name__ == "__main__":
     Main()
+
